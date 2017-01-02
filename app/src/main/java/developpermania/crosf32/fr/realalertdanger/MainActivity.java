@@ -158,26 +158,27 @@ public class MainActivity extends AppCompatActivity
 
     private String getLocation() {
         MyLocationListener loc = new MyLocationListener(m, m);
-        return "(" + getAddress(loc.getLongitude(), loc.getLatitude()) + ")" + "(long:" + loc.getLongitude() + ", lat:" + loc.getLatitude() + ", alt:" + loc.getAltitude() + ")";
+        return getAddress(loc.getLongitude(), loc.getLatitude()) + "(long:" + loc.getLongitude() + ", lat:" + loc.getLatitude() + ", alt:" + loc.getAltitude() + ")";
     }
     private String getAddress(double longitude, double latitude) {
         String add1 = "";
         String add2 = "";
         String pays = "";
-        Geocoder geo = new Geocoder(this);
-        List<Address> addresses = null;
         try {
+            Geocoder geo = new Geocoder(this);
+            List<Address> addresses = null;
             addresses = geo.getFromLocation(latitude, longitude, 2);
-        }catch(Exception ex) {
-            Log.e("Erreur", ex.getMessage());
+            add1 = addresses.get(0).getAddressLine(0);
+            add2 = addresses.get(0).getAddressLine(1);
+            pays = addresses.get(0).getCountryName();
+        } catch(Exception e) {
+           // Log.i("Information", "Geocoding impossible" + e.getMessage());
+            return "";
         }
-        add1 = addresses.get(0).getAddressLine(0);
-        add2 = addresses.get(0).getAddressLine(1);
-        pays = addresses.get(0).getCountryName();
         if(add1 == "" || add2 == "" || pays == "") {
-            return "Non précisé";
+            return "";
         } else {
-            return pays + " " + add2 + " " + add1;
+            return "(" + pays + " " + add2 + " " + add1 + ")";
         }
     }
     public enum Danger {
