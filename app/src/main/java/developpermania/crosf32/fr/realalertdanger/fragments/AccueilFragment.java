@@ -9,15 +9,11 @@ import android.view.ViewGroup;
 
 import developpermania.crosf32.fr.realalertdanger.R;
 
-/**
- * Created by pc on 26/12/2016.
- */
-
 public class AccueilFragment extends Fragment{
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.activity_main, container, false);
+        View v = inflater.inflate(R.layout.alert_main, container, false);
         return v;
     }
 }

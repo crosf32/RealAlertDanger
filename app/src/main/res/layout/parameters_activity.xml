@@ -4,7 +4,7 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:text="Numéro à appeler en cas de danger médical"
+        android:text="Medical problem : Number to send message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -25,10 +25,10 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="24dp"
         android:id="@+id/editText2"
-        android:text="Numéro" />
+        android:hint="Number" />
 
     <TextView
-        android:text="Numéro à appeler en cas de danger"
+        android:text="Danger : Number to call"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/editText2"
@@ -40,7 +40,7 @@
         android:textStyle="normal|bold" />
 
     <Button
-        android:text="Sauvegarder"
+        android:text="Save"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/button4"
@@ -55,8 +55,8 @@
         android:ems="10"
         android:layout_marginTop="12dp"
         android:id="@+id/editText3"
-        android:text="Numéro"
         android:layout_below="@+id/textView5"
         android:layout_alignLeft="@+id/editText2"
-        android:layout_alignStart="@+id/editText2" />
+        android:layout_alignStart="@+id/editText2"
+        android:hint="Numéro" />
 </RelativeLayout>

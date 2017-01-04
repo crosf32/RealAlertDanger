@@ -40,7 +40,12 @@ public class ServicesFragment extends Fragment{
                 } else {
                     numeroToCall = "0778241528";
                 }
-                MainActivity.m.sendSTestMS(numeroToCall, MainActivity.m.getMessageToSend(MainActivity.Danger.MEDICAL));
+                String mes = MainActivity.m.getMessageToSend(MainActivity.Danger.MEDICAL);
+                if(mes.equals("error")) {
+                    MainActivity.m.sendErrorNotif("Veuillez activer votre GPS");
+                } else {
+                    MainActivity.m.sendSTestMS(numeroToCall, mes);
+                }
             }
         }) ;
         policeButton = (Button) v.findViewById(R.id.button2);
@@ -54,7 +59,12 @@ public class ServicesFragment extends Fragment{
                 } else {
                     numeroToCall = "0778241528";
                 }
-                MainActivity.m.sendSTestMS(numeroToCall, MainActivity.m.getMessageToSend(MainActivity.Danger.POLICE));
+                String mes = MainActivity.m.getMessageToSend(MainActivity.Danger.POLICE);
+                if(mes.equals("error")) {
+                    MainActivity.m.sendErrorNotif("Veuillez activer votre GPS");
+                } else {
+                    MainActivity.m.sendSTestMS(numeroToCall, mes);
+                }
             }
         });
         return v;

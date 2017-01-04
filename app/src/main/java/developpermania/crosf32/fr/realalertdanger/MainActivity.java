@@ -19,12 +19,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
-
-import org.json.JSONObject;
-
 import java.util.List;
-import java.util.Locale;
-
 import developpermania.crosf32.fr.realalertdanger.fragments.AccueilFragment;
 import developpermania.crosf32.fr.realalertdanger.fragments.ConditionsFragment;
 import developpermania.crosf32.fr.realalertdanger.fragments.ParametersFragment;
@@ -34,6 +29,9 @@ import developpermania.crosf32.fr.realalertdanger.listeners.MyLocationListener;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    // implements : NavigationView pr la navigationDrawer
+
+    //static car je ne peux pas acceder autrement avec les fragments
     public static MainActivity m;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +39,9 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        //Une transaction que tu verras plus tard, ici elle me permet de ne pas atterir sur activity_main mais sur alert_main (je t'expliquerai)
+        android.app.FragmentManager fm = getFragmentManager();
+        fm.beginTransaction().replace(R.id.content_frame, new AccueilFragment()).commit();
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
+        // Demande d'autorisations
         ActivityCompat.requestPermissions(this,
                 new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                 10);
@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity
         m = this;
     }
 
-    @Override
+    @Override // Code généré automatiquement
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -72,19 +72,19 @@ public class MainActivity extends AppCompatActivity
             super.onBackPressed();
         }
     }
-    @Override
+    @Override // Code généré automatiquement
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
-    @Override
+    @Override // Code généré automatiquement
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+        int id = item.getItemId(); // Pr les settings
         android.app.FragmentManager fm = getFragmentManager();
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
@@ -97,12 +97,12 @@ public class MainActivity extends AppCompatActivity
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(MenuItem item) { // Pr choisir l'activity avec la navigation drawer
         // Handle navigation view item clicks here.
         int id = item.getItemId();
         android.app.FragmentManager fm = getFragmentManager();
         if (id == R.id.nav_home) {
-            fm.beginTransaction().replace(R.id.content_frame, new AccueilFragment()).commit();
+            fm.beginTransaction().replace(R.id.content_frame, new AccueilFragment()).commit(); // les fameuses transaction ^^
         } else if (id == R.id.nav_services) {
             fm.beginTransaction().replace(R.id.content_frame, new ServicesFragment()).commit();
         } else if (id == R.id.nav_conditions) {
@@ -115,51 +115,64 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-    public boolean checkGpsPermission() {
+    public boolean checkGpsPermission() { // Pr eviter les echec de perm (il faut check c'est obligatoire)
         String permission = "android.permission.ACCESS_FINE_LOCATION";
         int res = getApplicationContext().checkCallingOrSelfPermission(permission);
         Log.d("Permission ", String.valueOf((res == PackageManager.PERMISSION_GRANTED)));
         return (res == PackageManager.PERMISSION_GRANTED);
     }
-    private boolean checkSmsPermission() {
+    private boolean checkSmsPermission() { // également
         String permission = "android.permission.SEND_SMS";
         int res = getApplicationContext().checkCallingOrSelfPermission(permission);
         Log.i("Permission SMS ", String.valueOf(res ==  PackageManager.PERMISSION_GRANTED));
         return (res == PackageManager.PERMISSION_GRANTED);
     }
-    public boolean checkCallPhonePermission() {
-            String permission = "android.permission.CALL_PHONE";
-            int res = getApplicationContext().checkCallingOrSelfPermission(permission);
-            return (res == PackageManager.PERMISSION_GRANTED);
-        }
+    //Pr envoyer l'SMS
     public void sendSTestMS(String phoneNumber, String message)
     {
         if(checkSmsPermission()) {
+            // Aucune idée ce qu'est le PendingIntent mais il permet a fonction de fonctionner ^^ sans le pending ca marchait pas
             PendingIntent pi = PendingIntent.getActivity(this, 0,
                 new Intent(this, MainActivity.class), 0);
             SmsManager sms = SmsManager.getDefault();
             sms.sendTextMessage(phoneNumber, null, message, pi, null);
-            Toast.makeText(getApplicationContext(), "Le message a bien été envoyé", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "The message has been sent", Toast.LENGTH_SHORT).show();
         } else {
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.SEND_SMS},
                     10);
         }
     }
+    // Pr envoyer en toast les notifs ^^ (toast = message qui apparait en bas)
+    public void sendErrorNotif(String s) {
+        Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
+    }
+    // pr recuperer le message a envoyer ( Vous pouvez changer les messages)
     public String getMessageToSend(Danger d) {
-        if(d.equals(Danger.MEDICAL)) {
-            //Toast.makeText(getApplicationContext(), "Bonjour, j'ai un problème médical, veuillez me rejoindre au plus vite en " + getLocation(), Toast.LENGTH_SHORT).show();
-            return "Bonjour, j'ai un problème médical, veuillez me rejoindre au plus vite en " + getLocation();
+        String loc = getLocation();
+        if(loc.equals("error")) {
+            return "error";
         } else {
-            //Toast.makeText(getApplicationContext(), "Bonjour, je suis en danger, veuillez me rejoindre au plus vite en " + getLocation(), Toast.LENGTH_SHORT).show();
-            return "Bonjour, je suis en danger, veuillez me rejoindre au plus vite en " + getLocation();
+            if(d.equals(Danger.MEDICAL)) {
+                //Toast.makeText(getApplicationContext(), "Bonjour, j'ai un problème médical, veuillez me rejoindre au plus vite en " + getLocation(), Toast.LENGTH_SHORT).show();
+                return "Bonjour, j'ai un problème médical, veuillez me rejoindre au plus vite en " + loc;
+            } else {
+                //Toast.makeText(getApplicationContext(), "Bonjour, je suis en danger, veuillez me rejoindre au plus vite en " + getLocation(), Toast.LENGTH_SHORT).show();
+                return "Bonjour, je suis en danger, veuillez me rejoindre au plus vite en " + loc;
+            }
         }
     }
 
     private String getLocation() {
-        MyLocationListener loc = new MyLocationListener(m, m);
-        return getAddress(loc.getLongitude(), loc.getLatitude()) + "(long:" + loc.getLongitude() + ", lat:" + loc.getLatitude() + ", alt:" + loc.getAltitude() + ")";
+        try {
+            MyLocationListener loc = new MyLocationListener(m, m);
+            return getAddress(loc.getLongitude(), loc.getLatitude()) + "(long:" + loc.getLongitude() + ", lat:" + loc.getLatitude() + ", alt:" + loc.getAltitude() + ")";
+        } catch(Exception e) {
+            return "error";
+        }
     }
+
+    // Geolocalisation : reverse geocoding
     private String getAddress(double longitude, double latitude) {
         String add1 = "";
         String add2 = "";
@@ -180,7 +193,7 @@ public class MainActivity extends AppCompatActivity
         } else {
             return "(" + pays + " " + add2 + " " + add1 + ")";
         }
-    }
+    } // Enum = liste (ici medical ou danger, c'est plus propre ^^)
     public enum Danger {
         MEDICAL,
         POLICE

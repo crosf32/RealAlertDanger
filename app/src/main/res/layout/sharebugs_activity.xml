@@ -13,11 +13,10 @@
         android:id="@+id/editText"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:text="Votre message"
-        android:textColor="?attr/colorControlHighlight" />
+        android:hint="Your message" />
 
     <Button
-        android:text="Envoyer"
+        android:text="Send "
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/editText"
