@@ -155,10 +155,10 @@ public class MainActivity extends AppCompatActivity
         } else {
             if(d.equals(Danger.MEDICAL)) {
                 //Toast.makeText(getApplicationContext(), "Bonjour, j'ai un problème médical, veuillez me rejoindre au plus vite en " + getLocation(), Toast.LENGTH_SHORT).show();
-                return "Bonjour, j'ai un problème médical, veuillez me rejoindre au plus vite en " + loc;
+                return "Hello, i need a medical assistance. I'm in " + loc;
             } else {
                 //Toast.makeText(getApplicationContext(), "Bonjour, je suis en danger, veuillez me rejoindre au plus vite en " + getLocation(), Toast.LENGTH_SHORT).show();
-                return "Bonjour, je suis en danger, veuillez me rejoindre au plus vite en " + loc;
+                return "Hello, i need a police assistance. I'm in " + loc;
             }
         }
     }

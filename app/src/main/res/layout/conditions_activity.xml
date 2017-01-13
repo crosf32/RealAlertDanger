@@ -15,9 +15,14 @@
         android:textAlignment="center" />
 
     <TextView
-        android:text="This application aims to save you in case of danger, it should never be used differently"
+        android:text="When you start this application, you agree with this terms. 
+
+1- You use this application only when you are in danger.
+2- You take all the responsibility about your actions, we shall not be responsible.
+3- When you download this application, you accept to give us your GPS coordinates. 
+4-You agree to send a message in your own name. "
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="250dp"
         android:layout_below="@+id/textView2"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
