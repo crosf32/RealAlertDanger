@@ -39,8 +39,11 @@ public class ParametersFragment extends Fragment{
                     return;
                 } else {
                     if(nOne != "") {
+                        Log.i("BOFF", "PAS BOn");
                         saveNOne(nOne);
-                    } else {
+                    }
+                    if(nTwo != "") {
+                        Log.i("GoOd", "Excellent");
                         saveNTwo(nTwo);
                     }
                 }
